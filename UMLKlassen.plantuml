@@ -1,0 +1,200 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class AddCategoryAction {
+  + validate(): void
+  + execute(): String
+   newCatName: String
+   categories: List<Category>
+}
+class AddProductAction {
+  + execute(): String
+  + validate(): void
+   price: String
+   name: String
+   details: String
+   categoryId: int
+   categories: List<Category>
+}
+class Category {
+   name: String
+   products: Set<Product>
+   id: int
+}
+class CategoryDAO
+interface CategoryManager << interface >> {
+  + getCategoryByName(String): Category
+  + getCategory(int): Category
+  + addCategory(String): void
+  + delCategory(Category): void
+  + delCategoryById(int): void
+   categories: List<Category>
+}
+class CategoryManagerImpl {
+  + getCategory(int): Category
+  + getCategoryByName(String): Category
+  + delCategory(Category): void
+  + addCategory(String): void
+  + delCategoryById(int): void
+   categories: List<Category>
+}
+class DeleteCategoryAction {
+  + execute(): String
+   catId: int
+   categories: List<Category>
+}
+class DeleteProductAction {
+  + execute(): String
+   id: int
+}
+class GenericHibernateDAO<E, PK> {
+  + saveObject(E): void
+  + getObjectByName(String): E
+  + get(E): List<E>
+  + getObjectById(PK): E
+  + getSortedList(String, String): List<E>
+  + updateObject(E): void
+  + deleteObject(E): void
+  + deleteById(PK): void
+   objectList: List<E>
+}
+class HibernateUtil {
+   sessionFactory: SessionFactory
+}
+interface IGenericDAO<E, PK> << interface >> {
+  + get(E): List<E>
+  + deleteObject(E): void
+  + getObjectById(PK): E
+  + getObjectByName(String): E
+  + saveObject(E): void
+  + updateObject(E): void
+  + getSortedList(String, String): List<E>
+  + deleteById(PK): void
+   objectList: List<E>
+}
+class InitCategorySiteAction {
+  + execute(): String
+   pageToGoTo: String
+   user: User
+   categories: List<Category>
+}
+class ListAllProductsAction {
+  + execute(): String
+   products: List<Product>
+   user: User
+}
+class LoginAction {
+  + execute(): String
+  + validate(): void
+   password: String
+   firstname: String
+   username: String
+   lastname: String
+   role: String
+}
+class LogoutAction {
+  + execute(): String
+}
+class Product {
+   name: String
+   details: String
+   category: Category
+   price: double
+   id: int
+}
+class ProductDAO {
+  + getProductListByCriteria(String, Double, Double): List<Product>
+}
+class ProductDetailsAction {
+  + execute(): String
+   product: Product
+   searchMinPrice: Integer
+   user: User
+   searchValue: String
+   searchMaxPrice: Integer
+   id: int
+}
+interface ProductManager << interface >> {
+  + deleteProductById(int): void
+  + getProductByName(String): Product
+  + addProduct(String, double, int, String): int
+  + deleteProductsByCategoryId(int): boolean
+  + getProductById(int): Product
+  + getProductsForSearchValues(String, Double, Double): List<Product>
+   products: List<Product>
+}
+class ProductManagerImpl {
+  + getProductsForSearchValues(String, Double, Double): List<Product>
+  + addProduct(String, double, int, String): int
+  + deleteProductsByCategoryId(int): boolean
+  + getProductById(int): Product
+  + getProductByName(String): Product
+  + deleteProductById(int): void
+   products: List<Product>
+}
+class RegisterAction {
+  + execute(): String
+  + validate(): void
+   firstname: String
+   role: Role
+   username: String
+   password1: String
+   password2: String
+   lastname: String
+}
+class Role {
+   typ: String
+   level: int
+   id: int
+}
+class RoleDAO {
+  + getRoleByLevel(int): Role
+}
+class SearchAction {
+  + execute(): String
+   products: List<Product>
+   searchMaxPrice: String
+   user: User
+   searchValue: String
+   searchMinPrice: String
+   categories: List<Category>
+}
+class User {
+   firstname: String
+   password: String
+   role: Role
+   username: String
+   lastname: String
+   id: int
+}
+class UserDAO {
+  + getUserByUsername(String): User
+}
+interface UserManager << interface >> {
+  + registerUser(String, String, String, String, Role): void
+  + getUserByUsername(String): User
+  + deleteUserById(int): boolean
+  + getRoleByLevel(int): Role
+  + doesUserAlreadyExist(String): boolean
+}
+class UserManagerImpl {
+  + registerUser(String, String, String, String, Role): void
+  + deleteUserById(int): boolean
+  + getRoleByLevel(int): Role
+  + doesUserAlreadyExist(String): boolean
+  + validate(User): boolean
+  + getUserByUsername(String): User
+}
+
+CategoryDAO             -[#000082,plain]-^  GenericHibernateDAO    
+CategoryManagerImpl     -[#008200,dashed]-^  CategoryManager        
+GenericHibernateDAO     -[#008200,dashed]-^  IGenericDAO            
+ProductDAO              -[#000082,plain]-^  GenericHibernateDAO    
+ProductManagerImpl      -[#008200,dashed]-^  ProductManager         
+RoleDAO                 -[#000082,plain]-^  GenericHibernateDAO    
+UserDAO                 -[#000082,plain]-^  GenericHibernateDAO    
+UserManagerImpl         -[#008200,dashed]-^  UserManager            
+@enduml
