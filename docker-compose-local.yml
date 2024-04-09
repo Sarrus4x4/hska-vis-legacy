@@ -11,6 +11,19 @@ services:
           aliases:
               - legacywebshop
 
+  microservice-kategorien:
+    build:
+      context: ./
+      dockerfile: ./docker/DockerfileKategorien
+    environment:
+      MYSQL_HOST: web-shop-db-image
+    ports:
+      - "8081:8080"
+    networks:
+      local_dev_net:
+        aliases:
+          - kategorien
+
   web-shop-db-image:
     build:
       context: ./
