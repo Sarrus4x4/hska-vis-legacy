@@ -1,15 +1,12 @@
-FROM eclipse-temurin:17-jdk-alpine as builder
-WORKDIR /workspace/app
+FROM maven:3.9.6-eclipse-temurin-17-alpine as builder
 
-COPY mvnw .
-COPY .mvn .mvn
-COPY pom.xml .
-COPY src src
+COPY demo/pom.xml pom.xml
+COPY demo/src src
 
-RUN ./mvnw install -DskipTests
+RUN mvn clean install -DskipTests
 
 FROM eclipse-temurin:17-jdk-alpine
 VOLUME /tmp
 #ARG JAR_FILE
-COPY --from=builder /workspace/app/target/*.jar app.jar
+COPY --from=builder target/*.jar app.jar
 ENTRYPOINT ["java","-jar","/app.jar"]
