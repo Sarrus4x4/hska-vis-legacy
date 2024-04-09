@@ -11,6 +11,8 @@ import java.util.Map;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
+
+
 public class AddCategoryAction extends ActionSupport {
 
 	/**
@@ -26,6 +28,8 @@ public class AddCategoryAction extends ActionSupport {
 
 	public String execute() throws Exception {
 
+		String test = RestSchnittstelle.makeRestcall();
+
 		String res = "input";
 
 		Map<String, Object> session = ActionContext.getContext().getSession();
@@ -33,7 +37,7 @@ public class AddCategoryAction extends ActionSupport {
 		if(user != null && (user.getRole().getTyp().equals("admin"))) {
 			CategoryManager categoryManager = new CategoryManagerImpl();
 			// Add category
-			categoryManager.addCategory(newCatName);
+			categoryManager.addCategory(test); //newCatName
 			
 			// Go and get new Category list
 			this.setCategories(categoryManager.getCategories());
