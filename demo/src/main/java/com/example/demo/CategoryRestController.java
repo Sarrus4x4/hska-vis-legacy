@@ -1,17 +1,13 @@
 package com.example.demo;
 
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class CategoryRestController {
@@ -30,9 +26,9 @@ public class CategoryRestController {
 
     //Get Category
     //@RequestParam(value = "id") Integer id
-    @GetMapping("/Category")
-    public @ResponseBody Iterable<Category> getCategory() {
-        return categoryRepository.findAll();
+    @GetMapping("/Category/{id}")
+    public Optional<Category> getCategory(@PathVariable int id) {
+        return categoryRepository.findById(id);
     }
 
     //Post Category
