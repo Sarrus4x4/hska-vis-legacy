@@ -11,6 +11,7 @@ import java.util.Map;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
+import com.fasterxml.jackson.databind.JsonNode;
 
 
 public class AddCategoryAction extends ActionSupport {
@@ -28,7 +29,7 @@ public class AddCategoryAction extends ActionSupport {
 
 	public String execute() throws Exception {
 
-		String test = RestSchnittstelle.makeRestcall();
+		JsonNode test = RestHelper.getCall("/Category/1");
 
 		String res = "input";
 
@@ -37,7 +38,9 @@ public class AddCategoryAction extends ActionSupport {
 		if(user != null && (user.getRole().getTyp().equals("admin"))) {
 			CategoryManager categoryManager = new CategoryManagerImpl();
 			// Add category
-			categoryManager.addCategory(test); //newCatName
+
+
+			categoryManager.addCategory(test.get("name").asText()); //newCatName
 			
 			// Go and get new Category list
 			this.setCategories(categoryManager.getCategories());

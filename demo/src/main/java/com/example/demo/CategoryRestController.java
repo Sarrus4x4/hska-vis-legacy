@@ -28,7 +28,9 @@ public class CategoryRestController {
     //@RequestParam(value = "id") Integer id
     @GetMapping("/Category/{id}")
     public Optional<Category> getCategory(@PathVariable int id) {
+
         return categoryRepository.findById(id);
+
     }
 
     //Post Category
