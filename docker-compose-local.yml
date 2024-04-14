@@ -15,6 +15,9 @@ services:
     build:
       context: ./
       dockerfile: ./docker/DockerfileKategorien
+    depends_on:
+      web-shop-db-image:
+        condition: service_healthy
     environment:
       MYSQL_HOST: web-shop-db-image
     ports:
@@ -28,6 +31,9 @@ services:
     build:
       context: ./
       dockerfile: ./docker/DockerfileProducts
+    depends_on:
+      web-shop-db-image:
+        condition: service_healthy
     environment:
       MYSQL_HOST: web-shop-db-image
     ports:
@@ -48,6 +54,11 @@ services:
       MYSQL_DATABASE: webshop
       MYSQL_USER: webshopuser
       MYSQL_PASSWORD: 240b2c6d58ff2ce2f508b49f
+    healthcheck:
+      test: mysql -u root -pc8de110f37300a53a971749 -e exit
+      retries: 10
+      start_period: 60s
+      start_interval: 20s
     ports:
       - "3306:3306"
     networks:
