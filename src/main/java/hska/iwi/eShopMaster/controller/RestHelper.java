@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class RestHelper {
 
-    private static final String categoryUrl = "http://microservice-kategorien:8080/";
+    private static final String categoryUrl = "http://microservice-categories:8080/";
     private static final String productsUrl = "http://microservice-products:8080/";
 
 

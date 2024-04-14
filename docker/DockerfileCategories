@@ -1,7 +1,7 @@
 FROM maven:3.9.6-eclipse-temurin-17-alpine as builder
 
-COPY demo/pom.xml pom.xml
-COPY demo/src src
+COPY Categories/pom.xml pom.xml
+COPY Categories/src src
 
 RUN mvn clean install -DskipTests
 
