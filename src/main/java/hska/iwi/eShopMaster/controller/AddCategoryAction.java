@@ -4,10 +4,14 @@ import hska.iwi.eShopMaster.model.businessLogic.manager.CategoryManager;
 import hska.iwi.eShopMaster.model.businessLogic.manager.impl.CategoryManagerImpl;
 import hska.iwi.eShopMaster.model.database.dataobjects.Category;
 import hska.iwi.eShopMaster.model.database.dataobjects.User;
-
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -29,29 +33,45 @@ public class AddCategoryAction extends ActionSupport {
 
 	public String execute() throws Exception {
 
-		JsonNode test = RestHelper.getCall("/Category/1");
+		JsonNode test = RestHelper.getCall("/Category/1","category");
 
 		String res = "input";
 
 		Map<String, Object> session = ActionContext.getContext().getSession();
 		user = (User) session.get("webshop_user");
 		if(user != null && (user.getRole().getTyp().equals("admin"))) {
-			CategoryManager categoryManager = new CategoryManagerImpl();
-			// Add category
 
+			//call microservice
+			addCategory(newCatName);
+			getCategoriesFromMicroservice();
 
-			categoryManager.addCategory(test.get("name").asText()); //newCatName
-			
-			// Go and get new Category list
-			this.setCategories(categoryManager.getCategories());
-			
 			res = "success";
 		}
 		
 		return res;
 	
 	}
-	
+
+	public void addCategory(String name){
+		JsonNode allCategories = RestHelper.postCall("Category","category",null, "?name=" + name );
+	}
+
+	public void getCategoriesFromMicroservice(){
+		JsonNode allCategories = RestHelper.getCall("Category-getall","category");
+
+		List<Category> categories = new ArrayList<Category>();
+
+		for (JsonNode category : allCategories) {
+			int id = category.get("id").asInt();
+			String name = category.get("name").asText();
+
+			Category newOne = new Category(name, id);
+			categories.add(newOne);
+		}
+		this.categories = categories;
+	}
+
+
 	@Override
 	public void validate(){
 		if (getNewCatName().length() == 0) {

@@ -24,6 +24,19 @@ services:
         aliases:
           - kategorien
 
+  microservice-products:
+    build:
+      context: ./
+      dockerfile: ./docker/DockerfileProducts
+    environment:
+      MYSQL_HOST: web-shop-db-image
+    ports:
+      - "8082:8080"
+    networks:
+      local_dev_net:
+        aliases:
+          - products
+
   web-shop-db-image:
     build:
       context: ./
