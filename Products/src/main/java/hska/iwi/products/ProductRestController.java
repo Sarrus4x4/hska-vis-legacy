@@ -46,6 +46,10 @@ public class ProductRestController {
         // @ResponseBody means the returned String is the response, not a view name
         // @RequestParam means it is a parameter from the GET or POST request
 
+
+        //in die parameter vom addnewproduct @RequestBody String requestBody
+
+
         Product n = new Product();
         n.setName(name);
         n.setPrice(price);

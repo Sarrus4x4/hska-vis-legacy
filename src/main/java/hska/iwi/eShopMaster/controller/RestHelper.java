@@ -1,5 +1,7 @@
 package hska.iwi.eShopMaster.controller;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -12,6 +14,7 @@ import org.apache.http.entity.StringEntity;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 
 public class RestHelper {
@@ -21,15 +24,14 @@ public class RestHelper {
 
 
     private static String getUrlFromService(String service) {
-        switch (service) {
-            case "category":
-                return categoryUrl;
-            break;
-            case "product":
-                return productsUrl;
-
-            return null;
+        if(service == "category") {
+            return categoryUrl;
         }
+        else if (service == "product") {
+            return productsUrl;
+        }
+
+        return "";
     }
 
 
@@ -78,18 +80,34 @@ public class RestHelper {
         return null;
     }
 
+    //only url param, no body
     public static JsonNode postCall (String path, String service, JsonNode data, String requestParam){
         // POST request
         try {
             CloseableHttpClient httpClient = HttpClients.createDefault();
             HttpPost httpPost = new HttpPost(getUrlFromService(service) + path + requestParam);
+            HttpResponse postResponse = httpClient.execute(httpPost);
+            return parseResponse(postResponse);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    //only body
+    public static String postCallParam (String path, String service, ArrayList<NameValuePair> body){
+        // POST request
+        try {
+            CloseableHttpClient httpClient = HttpClients.createDefault();
+            HttpPost httpPost = new HttpPost(getUrlFromService(service) + path);
             //todo: post can currently only use request param and not data in body....
 
             //StringEntity postEntity = new StringEntity("{\"key\":\"value\"}");
-            //httpPost.setEntity(postEntity);
+            httpPost.setEntity(new UrlEncodedFormEntity(body, "UTF-8"));
 
             HttpResponse postResponse = httpClient.execute(httpPost);
-            return parseResponse(postResponse);
+            return postResponse.getEntity().toString();
         } catch (Exception e) {
             e.printStackTrace();
         }
