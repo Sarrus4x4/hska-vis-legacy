@@ -42,7 +42,7 @@ public class ListAllProductsAction extends ActionSupport {
 	}
 
 	public void getFromMicroservice(){
-		JsonNode allProducts = RestHelper.getCall("Product-getall","product");
+		JsonNode allProducts = RestHelper.getCall("Product","product");
 
 		List<Product> products = new ArrayList<Product>();
 
