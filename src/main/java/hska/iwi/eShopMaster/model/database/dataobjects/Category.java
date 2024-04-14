@@ -32,6 +32,18 @@ public class Category implements java.io.Serializable {
 		this.products = products;
 	}
 
+
+	public Category(String name, int id) {
+		this.name = name;
+		this.id = id;
+	}
+
+	public Category(String name, Set<Product> products,int id) {
+		this.name = name;
+		this.products = products;
+		this.id = id;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false)

@@ -1,5 +1,6 @@
 package com.example.demo;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -33,6 +34,15 @@ public class CategoryRestController {
 
     }
 
+    //Get Category
+    @GetMapping("/Category-getall")
+    public  @ResponseBody List<Category> getAllCategory() {
+
+        List<Category> categoryList = new ArrayList<Category>();
+        categoryRepository.findAll().forEach(category -> categoryList.add(category));
+        return categoryList;
+    }
+
     //Post Category
     //curl http://localhost:8080/Category -d name=First
     @PostMapping(path="/Category") // Map ONLY POST Requests
@@ -47,8 +57,8 @@ public class CategoryRestController {
     }
 
     //Delete Category
-    @DeleteMapping("/Category")
-    public @ResponseBody String deleteCategory (@RequestParam Integer id) {
+    @DeleteMapping("/Category/{id}")
+    public @ResponseBody String deleteCategory (@PathVariable int id) {
         categoryRepository.deleteById(id);
         return "Deleted";
     }

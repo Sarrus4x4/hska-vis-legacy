@@ -16,12 +16,27 @@ import java.io.InputStreamReader;
 
 public class RestHelper {
 
-    private static final String baseUrl = "http://microservice-kategorien:8080";
+    private static final String categoryUrl = "http://microservice-kategorien:8080/";
+    private static final String productsUrl = "http://microservice-products:8080/";
 
-    public static JsonNode getCall(String path) {
+
+    private static String getUrlFromService(String service) {
+        switch (service) {
+            case "category":
+                return categoryUrl;
+            break;
+            case "product":
+                return productsUrl;
+
+            return null;
+        }
+    }
+
+
+    public static JsonNode getCall(String path, String service) {
         try{
             CloseableHttpClient httpClient = HttpClients.createDefault();
-            HttpGet httpGet = new HttpGet(baseUrl + path); // /helloworld
+            HttpGet httpGet = new HttpGet(getUrlFromService(service) + path); // /helloworld
             CloseableHttpResponse response = httpClient.execute(httpGet);
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
@@ -49,10 +64,10 @@ public class RestHelper {
         return null;
     }
 
-    public static JsonNode putCall (String path, JsonNode data){
+    public static JsonNode putCall (String path, String service, JsonNode data){
         try{
         CloseableHttpClient httpClient = HttpClients.createDefault();
-        HttpPut httpPut = new HttpPut(baseUrl + path);
+        HttpPut httpPut = new HttpPut(getUrlFromService(service) + path);
         StringEntity putEntity = new StringEntity("{\"key\":\"value\"}");
         httpPut.setEntity(putEntity);
         HttpResponse putResponse = httpClient.execute(httpPut);
@@ -63,13 +78,16 @@ public class RestHelper {
         return null;
     }
 
-    public static JsonNode postCall (String path, JsonNode data){
+    public static JsonNode postCall (String path, String service, JsonNode data, String requestParam){
         // POST request
         try {
             CloseableHttpClient httpClient = HttpClients.createDefault();
-            HttpPost httpPost = new HttpPost(baseUrl + path);
-            StringEntity postEntity = new StringEntity("{\"key\":\"value\"}");
-            httpPost.setEntity(postEntity);
+            HttpPost httpPost = new HttpPost(getUrlFromService(service) + path + requestParam);
+            //todo: post can currently only use request param and not data in body....
+
+            //StringEntity postEntity = new StringEntity("{\"key\":\"value\"}");
+            //httpPost.setEntity(postEntity);
+
             HttpResponse postResponse = httpClient.execute(httpPost);
             return parseResponse(postResponse);
         } catch (Exception e) {
@@ -79,10 +97,10 @@ public class RestHelper {
         return null;
     }
 
-    public static JsonNode deleteCall (String path){
+    public static JsonNode deleteCall (String path,String service){
         try {
             CloseableHttpClient httpClient = HttpClients.createDefault();
-            HttpDelete httpDelete = new HttpDelete(baseUrl + path);
+            HttpDelete httpDelete = new HttpDelete(getUrlFromService(service) + path);
             HttpResponse deleteResponse = httpClient.execute(httpDelete);
             return parseResponse(deleteResponse);
         }catch (Exception e) {
@@ -106,6 +124,8 @@ public class RestHelper {
         JsonNode jsonResponse = objectMapper.readTree(result.toString());
         return jsonResponse;
     }
+
+
 
 }
 

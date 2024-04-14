@@ -1,10 +1,12 @@
 package hska.iwi.eShopMaster.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import hska.iwi.eShopMaster.model.businessLogic.manager.CategoryManager;
 import hska.iwi.eShopMaster.model.businessLogic.manager.impl.CategoryManagerImpl;
 import hska.iwi.eShopMaster.model.database.dataobjects.Category;
 import hska.iwi.eShopMaster.model.database.dataobjects.User;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -32,8 +34,8 @@ public class InitCategorySiteAction extends ActionSupport {
 		boolean isAdmin = true;
 		if(user != null && isAdmin) {
 
-			CategoryManager categoryManager = new CategoryManagerImpl();
-			this.setCategories(categoryManager.getCategories());
+			//call microservice
+			getCategoriesFromMicroservice();
 			
 			if(pageToGoTo != null){
 				if(pageToGoTo.equals("c")){
@@ -46,6 +48,20 @@ public class InitCategorySiteAction extends ActionSupport {
 		}
 		
 		return res;
+	}
+
+	public void getCategoriesFromMicroservice(){
+		JsonNode allCategories = RestHelper.getCall("Category-getall","category");
+
+		List<Category> categories = new ArrayList<Category>();
+
+		for (JsonNode category : allCategories) {
+			int id = category.get("id").asInt();
+			String name = category.get("name").asText();
+			Category newOne = new Category(name, id);
+			categories.add(newOne);
+		}
+		this.categories = categories;
 	}
 
 	public List<Category> getCategories() {
