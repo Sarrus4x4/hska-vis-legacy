@@ -1,5 +1,6 @@
 package hska.iwi.eShopMaster.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import hska.iwi.eShopMaster.model.businessLogic.manager.CategoryManager;
 import hska.iwi.eShopMaster.model.businessLogic.manager.ProductManager;
 import hska.iwi.eShopMaster.model.businessLogic.manager.impl.CategoryManagerImpl;
@@ -8,6 +9,7 @@ import hska.iwi.eShopMaster.model.database.dataobjects.Category;
 import hska.iwi.eShopMaster.model.database.dataobjects.Product;
 import hska.iwi.eShopMaster.model.database.dataobjects.User;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -46,19 +48,43 @@ public class SearchAction extends ActionSupport{
 		
 		if(user != null){
 			// Search products and show results:
-			ProductManager productManager = new ProductManagerImpl();
-//			this.products = productManager.getProductsForSearchValues(this.searchDescription, this.searchMinPrice, this.searchMaxPrice);
+			String args = "?details=" + this.searchDescription;
+
 			if (!searchMinPrice.isEmpty()){
-				sMinPrice =  Double.parseDouble(this.searchMinPrice);
+				args += "&minPrice=" + this.searchMinPrice;
 			}
 			if (!searchMaxPrice.isEmpty()){
-				sMaxPrice =  Double.parseDouble(this.searchMaxPrice);
+				args += "&maxPrice=" + this.searchMaxPrice;
 			}
-			this.products = productManager.getProductsForSearchValues(this.searchDescription, sMinPrice, sMaxPrice);
-			
+
+			JsonNode response = RestHelper.getCall("Search" + args, "product");
+
+			List<Product> products = new ArrayList<Product>();
+
+			for (JsonNode product : response) {
+				int id = product.get("id").asInt();
+				String name = product.get("name").asText();
+				int productCategoryId = product.get("categoryId").asInt();
+
+				JsonNode catResult = RestHelper.getCall("Category/" + productCategoryId, "category");
+
+				String categoryName = catResult.get("name").asText();
+				int categoryId =  catResult.get("id").asInt();
+
+				Category category = new Category(categoryName,categoryId);
+
+				double price = product.get("price").asDouble();
+				String details =  product.get("details").asText();
+
+
+				Product newOne = new Product(id,name,price,category,details);
+				products.add(newOne);
+			}
+			this.products = products;
+
 			// Show all categories:
-			CategoryManager categoryManager = new CategoryManagerImpl();
-			this.categories = categoryManager.getCategories();
+			//CategoryManager categoryManager = new CategoryManagerImpl();
+			//this.categories = categoryManager.getCategories();
 			result = "success";
 		}
 		

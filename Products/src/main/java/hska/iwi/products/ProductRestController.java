@@ -30,6 +30,24 @@ public class ProductRestController {
 
     }
 
+    //Get Product Search
+    //@RequestParam(value = "id") Integer id
+    // optional request params are null if not used
+    @GetMapping("/Search")
+    public Iterable<Product> getProduct(@RequestParam(required = false, value = "") String details,
+                                        @RequestParam(required = false) Double minPrice,
+                                        @RequestParam(required = false) Double maxPrice) {
+        if(minPrice == null) {
+            minPrice = -1.0;
+        }
+
+        if(maxPrice == null) {
+            maxPrice = Double.MAX_VALUE;
+        }
+
+        return productRepository.findByDetailsContainsAndPriceBetween(details, minPrice, maxPrice);
+    }
+
     @GetMapping(path="/Product")
     public @ResponseBody Iterable<Product> getAllProducts() {
         // This returns a JSON or XML with the users
@@ -65,8 +83,6 @@ public class ProductRestController {
         productRepository.deleteById(id);
         return "Deleted";
     }
-
-
 
 
 }
