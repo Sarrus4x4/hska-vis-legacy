@@ -9,6 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import com.fasterxml.jackson.databind.JsonNode;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import com.fasterxml.jackson.databind.JsonNode;
 
 @RestController
 public class CategoryRestController {
@@ -60,7 +68,28 @@ public class CategoryRestController {
     @DeleteMapping("/Category/{id}")
     public @ResponseBody String deleteCategory (@PathVariable int id) {
         categoryRepository.deleteById(id);
-        return "Deleted";
+
+        //get all products with that category
+        RestTemplate getCategories = new RestTemplate();
+        ResponseEntity<JsonNode> getCategoriesResponse = getCategories.
+                getForEntity("http://microservice-products:8080/Product", JsonNode.class);
+        JsonNode getCategoriesResponseBody = getCategoriesResponse.getBody();
+
+        for (JsonNode json : getCategoriesResponseBody) {
+            // Read category id
+            int categoryId = json.get("categoryId").asInt();
+            //if category matches then delete the product
+            if(categoryId == id){
+                // Read product id
+                int productId = json.get("id").asInt();
+                //make delete call
+                RestTemplate deleteProducts = new RestTemplate();
+                // Make the DELETE request
+                deleteProducts.delete("http://microservice-products:8080/Product/" + productId);
+            }
+        }
+
+        return "deleted";
     }
 
 
