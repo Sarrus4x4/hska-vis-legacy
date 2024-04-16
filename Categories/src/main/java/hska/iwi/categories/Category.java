@@ -1,4 +1,4 @@
-package com.example.demo;
+package hska.iwi.categories;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

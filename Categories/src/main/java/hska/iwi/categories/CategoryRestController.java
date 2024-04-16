@@ -1,4 +1,4 @@
-package com.example.demo;
+package hska.iwi.categories;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

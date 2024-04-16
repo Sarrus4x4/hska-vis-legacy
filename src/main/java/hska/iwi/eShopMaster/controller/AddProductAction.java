@@ -1,5 +1,6 @@
 package hska.iwi.eShopMaster.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import hska.iwi.eShopMaster.model.businessLogic.manager.CategoryManager;
 import hska.iwi.eShopMaster.model.businessLogic.manager.ProductManager;
 import hska.iwi.eShopMaster.model.businessLogic.manager.impl.CategoryManagerImpl;
@@ -7,11 +8,14 @@ import hska.iwi.eShopMaster.model.businessLogic.manager.impl.ProductManagerImpl;
 import hska.iwi.eShopMaster.model.database.dataobjects.Category;
 import hska.iwi.eShopMaster.model.database.dataobjects.User;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 
 public class AddProductAction extends ActionSupport {
 
@@ -30,17 +34,39 @@ public class AddProductAction extends ActionSupport {
 
 		if(user != null && (user.getRole().getTyp().equals("admin"))) {
 
-			ProductManager productManager = new ProductManagerImpl();
-			int productId = productManager.addProduct(name, Double.parseDouble(price), categoryId,
-					details);
-
-			if (productId > 0) {
-				result = "success";
+			// Restcall zu Kategorien um zu überprüfen ob Kategroie existieren
+			JsonNode catResult = RestHelper.getCall("Category/" + categoryId, "category");
+			if(catResult.isNull()) {
+				return "Error category " + categoryId + " does not exist";
 			}
+
+			// Restcall zu Produkte um Produkt anzulegen
+			ArrayList<NameValuePair> postParameters = new ArrayList<NameValuePair>();
+			postParameters.add(new BasicNameValuePair("name", name));
+			postParameters.add(new BasicNameValuePair("categoryId", categoryId + ""));
+			postParameters.add(new BasicNameValuePair("price", price));
+			postParameters.add(new BasicNameValuePair("details", details));
+
+
+			String res = RestHelper.postCallParam("Product", "product", postParameters);
+			System.out.println(res);
+
+
+			//ProductManager productManager = new ProductManagerImpl();
+			//int productId = productManager.addProduct(name, Double.parseDouble(price), categoryId,
+			//		details);
+
+
+
+			//if (productId > 0) {
+			result = "success";
+			//}
 		}
 
 		return result;
 	}
+
+
 
 	@Override
 	public void validate() {

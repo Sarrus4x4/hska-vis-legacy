@@ -1,12 +1,11 @@
 FROM maven:3.9.6-eclipse-temurin-17-alpine as builder
 
-COPY demo/pom.xml pom.xml
-COPY demo/src src
+COPY Products/pom.xml pom.xml
+COPY Products/src src
 
 RUN mvn clean install -DskipTests
 
 FROM eclipse-temurin:17-jdk-alpine
 VOLUME /tmp
-#ARG JAR_FILE
 COPY --from=builder target/*.jar app.jar
 ENTRYPOINT ["java","-jar","/app.jar"]

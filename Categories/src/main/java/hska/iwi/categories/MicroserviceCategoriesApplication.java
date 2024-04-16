@@ -1,13 +1,13 @@
-package com.example.demo;
+package hska.iwi.categories;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MicroserviceKategorienApplication {
+public class MicroserviceCategoriesApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MicroserviceKategorienApplication.class, args);
+		SpringApplication.run(MicroserviceCategoriesApplication.class, args);
 	}
 
 }
