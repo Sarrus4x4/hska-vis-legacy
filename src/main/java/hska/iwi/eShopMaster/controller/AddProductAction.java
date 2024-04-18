@@ -36,31 +36,19 @@ public class AddProductAction extends ActionSupport {
 
 			// Restcall zu Kategorien um zu überprüfen ob Kategroie existieren
 			JsonNode catResult = RestHelper.getCall("Category/" + categoryId, "category");
-			if(catResult.isNull()) {
-				return "Error category " + categoryId + " does not exist";
+
+			if(catResult != null && !catResult.isNull()) {
+				// Restcall zu Produkte um Produkt anzulegen
+				ArrayList<NameValuePair> postParameters = new ArrayList<NameValuePair>();
+				postParameters.add(new BasicNameValuePair("name", name));
+				postParameters.add(new BasicNameValuePair("categoryId", categoryId + ""));
+				postParameters.add(new BasicNameValuePair("price", price));
+				postParameters.add(new BasicNameValuePair("details", details));
+
+				String res = RestHelper.postCallParam("Product", "product", postParameters);
 			}
 
-			// Restcall zu Produkte um Produkt anzulegen
-			ArrayList<NameValuePair> postParameters = new ArrayList<NameValuePair>();
-			postParameters.add(new BasicNameValuePair("name", name));
-			postParameters.add(new BasicNameValuePair("categoryId", categoryId + ""));
-			postParameters.add(new BasicNameValuePair("price", price));
-			postParameters.add(new BasicNameValuePair("details", details));
-
-
-			String res = RestHelper.postCallParam("Product", "product", postParameters);
-			System.out.println(res);
-
-
-			//ProductManager productManager = new ProductManagerImpl();
-			//int productId = productManager.addProduct(name, Double.parseDouble(price), categoryId,
-			//		details);
-
-
-
-			//if (productId > 0) {
 			result = "success";
-			//}
 		}
 
 		return result;
