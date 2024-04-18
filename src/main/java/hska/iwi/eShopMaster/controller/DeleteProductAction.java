@@ -1,6 +1,9 @@
 package hska.iwi.eShopMaster.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import hska.iwi.eShopMaster.model.database.dataAccessObjects.ProductDAO;
+import hska.iwi.eShopMaster.model.database.dataobjects.Category;
+import hska.iwi.eShopMaster.model.database.dataobjects.Product;
 import hska.iwi.eShopMaster.model.database.dataobjects.User;
 
 import java.util.Map;
@@ -26,10 +29,9 @@ public class DeleteProductAction extends ActionSupport {
 		
 		if(user != null && (user.getRole().getTyp().equals("admin"))) {
 
-			new ProductDAO().deleteById(id);
-			{
-				res = "success";
-			}
+			JsonNode allCategories = RestHelper.deleteCall("Product/" + id,"product");
+
+			res = "success";
 		}
 		
 		return res;
