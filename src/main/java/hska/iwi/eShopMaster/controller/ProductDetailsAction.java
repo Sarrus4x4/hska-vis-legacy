@@ -1,7 +1,9 @@
 package hska.iwi.eShopMaster.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import hska.iwi.eShopMaster.model.businessLogic.manager.ProductManager;
 import hska.iwi.eShopMaster.model.businessLogic.manager.impl.ProductManagerImpl;
+import hska.iwi.eShopMaster.model.database.dataobjects.Category;
 import hska.iwi.eShopMaster.model.database.dataobjects.Product;
 import hska.iwi.eShopMaster.model.database.dataobjects.User;
 
@@ -32,8 +34,30 @@ public class ProductDetailsAction extends ActionSupport {
 		user = (User) session.get("webshop_user");
 		
 		if(user != null) {
-			ProductManager productManager = new ProductManagerImpl();
-			product = productManager.getProductById(id);
+
+			product = new Product();
+			JsonNode productRes = RestHelper.getCall("Product/" + id,"product");
+
+			if(productRes != null && !productRes.isNull()) {
+
+				int id = productRes.get("id").asInt();
+				String name = productRes.get("name").asText();
+				int productCategoryId = productRes.get("categoryId").asInt();
+				double price = productRes.get("price").asDouble();
+				String details =  productRes.get("details").asText();
+
+				JsonNode catResult = RestHelper.getCall("Category/" + productCategoryId, "category");
+
+				if(catResult != null && !catResult.isNull()) {
+					String categoryName = catResult.get("name").asText();
+					int categoryId =  catResult.get("id").asInt();
+
+					Category category = new Category(categoryName, categoryId);
+
+					product = new Product(id, name, price, category, details);
+
+				}
+			}
 			
 			res = "success";			
 		}
