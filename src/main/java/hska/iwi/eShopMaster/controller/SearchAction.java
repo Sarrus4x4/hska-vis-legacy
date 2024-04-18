@@ -59,28 +59,31 @@ public class SearchAction extends ActionSupport{
 
 			JsonNode response = RestHelper.getCall("Search" + args, "product");
 
-			List<Product> products = new ArrayList<Product>();
+			if(response != null && !response.isNull()) {
+				List<Product> products = new ArrayList<Product>();
 
-			for (JsonNode product : response) {
-				int id = product.get("id").asInt();
-				String name = product.get("name").asText();
-				int productCategoryId = product.get("categoryId").asInt();
+				for (JsonNode product : response) {
+					int id = product.get("id").asInt();
+					String name = product.get("name").asText();
+					int productCategoryId = product.get("categoryId").asInt();
+					double price = product.get("price").asDouble();
+					String details =  product.get("details").asText();
 
-				JsonNode catResult = RestHelper.getCall("Category/" + productCategoryId, "category");
+					JsonNode catResult = RestHelper.getCall("Category/" + productCategoryId, "category");
 
-				String categoryName = catResult.get("name").asText();
-				int categoryId =  catResult.get("id").asInt();
+					if(catResult != null && !catResult.isNull()) {
+						String categoryName = catResult.get("name").asText();
+						int categoryId =  catResult.get("id").asInt();
 
-				Category category = new Category(categoryName,categoryId);
+						Category category = new Category(categoryName,categoryId);
 
-				double price = product.get("price").asDouble();
-				String details =  product.get("details").asText();
-
-
-				Product newOne = new Product(id,name,price,category,details);
-				products.add(newOne);
+						Product newOne = new Product(id, name, price, category, details);
+						products.add(newOne);
+					}
+				}
+				this.products = products;
 			}
-			this.products = products;
+
 
 			// Show all categories:
 			//CategoryManager categoryManager = new CategoryManagerImpl();
