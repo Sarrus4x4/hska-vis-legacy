@@ -23,6 +23,12 @@ spec:
             secretKeyRef:
               name: mysql-credentials
               key: MYSQL_ROOT_PASSWORD
+        - name: MYSQL_DATABASE
+          value: webshop
+        - name: MYSQL_USER
+          value: webshopuser
+        - name: MYSQL_PASSWORD
+          value: 240b2c6d58ff2ce2f508b49f
         ports:
         - containerPort: 3306
           name: mysql
