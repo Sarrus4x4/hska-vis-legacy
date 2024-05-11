@@ -3,8 +3,15 @@ package hska.iwi.products;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.http.*;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+
 
 @RestController
 public class ProductRestController {
@@ -67,6 +74,15 @@ public class ProductRestController {
 
         //in die parameter vom addnewproduct @RequestBody String requestBody
 
+        RestTemplate checkCategoryCall = new RestTemplate();
+        try{
+            ResponseEntity<String> response
+                    = checkCategoryCall.getForEntity("http://microservice-categories:8080/Category/" + categoryId, String.class);
+        }catch (Exception e){
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "category with id not found"
+            );
+        }
 
         Product n = new Product();
         n.setName(name);
