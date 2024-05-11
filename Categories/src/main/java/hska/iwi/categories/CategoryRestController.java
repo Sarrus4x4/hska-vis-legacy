@@ -17,6 +17,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.ResponseEntity;
 import com.fasterxml.jackson.databind.JsonNode;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.http.HttpStatus;
 
 @RestController
 public class CategoryRestController {
@@ -37,13 +41,17 @@ public class CategoryRestController {
     //@RequestParam(value = "id") Integer id
     @GetMapping("/Category/{id}")
     public Optional<Category> getCategory(@PathVariable int id) {
-
-        return categoryRepository.findById(id);
-
+        Optional<Category> category = categoryRepository.findById(id);
+        if(category.isEmpty()){
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "category not found"
+            );
+        }
+        return category;
     }
 
     //Get Category
-    @GetMapping("/Category-getall")
+    @GetMapping("/Category")
     public  @ResponseBody List<Category> getAllCategory() {
 
         List<Category> categoryList = new ArrayList<Category>();
