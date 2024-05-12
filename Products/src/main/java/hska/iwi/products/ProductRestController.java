@@ -32,9 +32,13 @@ public class ProductRestController {
     //@RequestParam(value = "id") Integer id
     @GetMapping("/Product/{id}")
     public Optional<Product> getProduct(@PathVariable int id) {
-
-        return productRepository.findById(id);
-
+                Optional<Product> product = productRepository.findById(id);
+        if(product.isEmpty()){
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "category not found"
+            );
+        }
+        return product;
     }
 
     //Get Product Search
