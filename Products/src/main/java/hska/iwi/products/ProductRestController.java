@@ -44,6 +44,10 @@ public class ProductRestController {
     public Iterable<Product> getProduct(@RequestParam(required = false, value = "") String details,
                                         @RequestParam(required = false) Double minPrice,
                                         @RequestParam(required = false) Double maxPrice) {
+        if(details == null) {
+            details = "";
+        }
+
         if(minPrice == null) {
             minPrice = -1.0;
         }

@@ -51,7 +51,7 @@ public class DeleteCategoryAction extends ActionSupport {
 
 	}
 	public void getCategoriesFromMicroservice(){
-		JsonNode allCategories = RestHelper.getCall("Category-getall","category");
+		JsonNode allCategories = RestHelper.getCall("Category","category");
 
 		List<Category> categories = new ArrayList<Category>();
 
