@@ -1,0 +1,36 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: categories-ingress
+  labels:
+    app: ingress-hska-vis
+spec:
+  # tls:
+  #   - hosts:
+  #       - {{ .Values.Second }}.{{ .Values.Top }}
+  #     secretName: <secret>
+  # host: {{ .Values.Second }}.{{ .Values.Top }}
+  rules:
+    - http:
+        paths:
+          - path: /Category
+            pathType: Prefix
+            backend:
+              service:
+                name: categories
+                port:
+                  number: 8080
+          - path: /Category-getall
+            pathType: Exact
+            backend:
+              service:
+                name: categories
+                port:
+                  number: 8080
+          - path: /helloworld
+            pathType: Exact
+            backend:
+              service:
+                name: categories
+                port:
+                  number: 8080
