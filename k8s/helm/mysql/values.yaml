@@ -4,3 +4,6 @@
 
 replicaCount: 1
 
+image:
+  name: koph1033/hska-vis-legacy
+  tag: mysql-0.1.0
