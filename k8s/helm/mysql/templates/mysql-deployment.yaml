@@ -14,7 +14,7 @@ spec:
         app: mysql
     spec:
       containers:
-      - image: localhost:32000/hska-vis-mysql:0.1.0
+      - image: koph1033/hska-vis-legacy:mysql-0.1.0
         name: mysql
         env:
           # Use secret in real usage

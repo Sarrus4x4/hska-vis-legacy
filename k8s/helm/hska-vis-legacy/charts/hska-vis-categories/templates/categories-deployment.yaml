@@ -5,7 +5,7 @@ metadata:
     service: hska-vis-categories
   name: categories
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: 1
   selector:
     matchLabels:
       service: hska-vis-categories
@@ -20,7 +20,7 @@ spec:
         service: hska-vis-categories
     spec:
       containers:
-        - image: localhost:32000/hska-vis-categories:{{ .Values.imageTag }}
+        - image: koph1033/hska-vis-legacy:categories-0.1.0
           name: categories
           env:
             - name: MYSQL_HOST
