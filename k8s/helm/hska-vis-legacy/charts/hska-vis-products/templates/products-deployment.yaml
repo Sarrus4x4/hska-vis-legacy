@@ -20,7 +20,7 @@ spec:
         service: hska-vis-products
     spec:
       containers:
-        - image: koph1033/hska-vis-legacy:products-0.1.0
+        - image: koph1033/hska-vis-legacy:products-0.1.2
           name: products
           env:
             - name: MYSQL_HOST

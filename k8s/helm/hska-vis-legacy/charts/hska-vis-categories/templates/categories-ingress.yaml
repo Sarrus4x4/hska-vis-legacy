@@ -20,13 +20,6 @@ spec:
                 name: categories
                 port:
                   number: 8080
-          - path: /Category-getall
-            pathType: Exact
-            backend:
-              service:
-                name: categories
-                port:
-                  number: 8080
           - path: /helloworld
             pathType: Exact
             backend:
