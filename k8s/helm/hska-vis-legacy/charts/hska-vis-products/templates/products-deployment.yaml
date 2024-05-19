@@ -2,13 +2,13 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    service: hska-vis-categories
-  name: categories
+    service: hska-vis-products
+  name: products
 spec:
   replicas: 1
   selector:
     matchLabels:
-      service: hska-vis-categories
+      service: hska-vis-products
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -17,11 +17,11 @@ spec:
   template:
     metadata:
       labels:
-        service: hska-vis-categories
+        service: hska-vis-products
     spec:
       containers:
-        - image: koph1033/hska-vis-legacy:categories-0.1.1
-          name: categories
+        - image: koph1033/hska-vis-legacy:products-0.1.0
+          name: products
           env:
             - name: MYSQL_HOST
               value: mysql.mysql

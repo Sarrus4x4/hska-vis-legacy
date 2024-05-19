@@ -26,6 +26,18 @@ sudo rm -r mysql
 kubectl create secret generic -n mysql mysql-credentials --from-literal=MYSQL_ROOT_PASSWORD='c8de110f37300a53a971749'
 ```
 
+## Start Cluster
+
+```bash
+minkube start
+```
+
+## Open Dashboard
+
+```bash
+minikube dashboard --url
+```
+
 ## Local images
 
 To be able to use docker images in kubernetes they must be pushed to a registry. Microk8s provides a registry addon (Minikube seems to also have on). Docker images can be pushed to this registry. By tagging the image with `localhost:32000/`, Kubernetes tries to pull the image from this build-in registry.
