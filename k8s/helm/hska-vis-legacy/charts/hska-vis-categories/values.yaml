@@ -4,4 +4,6 @@
 
 replicaCount: 1
 
-imageTag: 0.1.0
+image:
+  name: koph1033/hska-vis-legacy
+  tag: categories-0.1.1
