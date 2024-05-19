@@ -20,7 +20,7 @@ spec:
         service: hska-vis-categories
     spec:
       containers:
-        - image: koph1033/hska-vis-legacy:categories-0.1.1
+        - image: {{ .Values.image.name }}{{ ":" }}{{ .Values.image.tag }}
           name: categories
           env:
             - name: MYSQL_HOST
