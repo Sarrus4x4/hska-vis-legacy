@@ -34,7 +34,7 @@ public class CategoryRestController {
     private String productsHost;
 
     //helloworld
-    @GetMapping("/helloworld")
+    @GetMapping("/Category/helloworld")
     public String helloworld() {
         return "Hello World";
     }

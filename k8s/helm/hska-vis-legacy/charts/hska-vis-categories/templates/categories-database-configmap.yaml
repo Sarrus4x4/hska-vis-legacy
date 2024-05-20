@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: categories-database-config
+data:
+  MYSQL_HOST: {{ .Values.database.host }}
+  CATEGORIES_DB_USER: {{ .Values.database.user }}
+  CATEGORIES_DB_NAME: {{ .Values.database.name }}
