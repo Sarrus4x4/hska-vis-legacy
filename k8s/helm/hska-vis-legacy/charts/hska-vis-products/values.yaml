@@ -3,3 +3,16 @@
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
+
+image:
+  name: koph1033/hska-vis-legacy
+  tag: products-0.1.4
+
+database:
+  host: mysql.mysql
+  user: productsuser
+  name: db_products
+
+microservices:
+  categories:
+    host: categories.categories

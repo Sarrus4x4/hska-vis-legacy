@@ -5,7 +5,7 @@ metadata:
     service: hska-vis-products
   name: products
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       service: hska-vis-products
@@ -20,20 +20,34 @@ spec:
         service: hska-vis-products
     spec:
       containers:
-        - image: koph1033/hska-vis-legacy:products-0.1.2
+        - image: {{ .Values.image.name }}{{ ":" }}{{ .Values.image.tag }}
           name: products
           env:
             - name: MYSQL_HOST
-              value: mysql.mysql
-            - name: CATEGORIES_HOST
-              value: categories.categories
+              valueFrom:
+                configMapKeyRef:
+                  name: products-database-config
+                  key: MYSQL_HOST
+            - name: PRODUCTS_DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: products-database-config
+                  key: PRODUCTS_DB_NAME
             - name: PRODUCTS_DB_USER
-              value: productsuser
+              valueFrom:
+                configMapKeyRef:
+                  name: products-database-config
+                  key: PRODUCTS_DB_USER
             - name: PRODUCTS_DB_PWD
               valueFrom:
                 secretKeyRef:
                   name: products-credentials
                   key: MYSQL_PASSWORD
+            - name: CATEGORIES_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: products-microservice-config
+                  key: CATEGORIES_HOST
           ports:
           - containerPort: 8080
           resources: {}

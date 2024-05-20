@@ -27,10 +27,3 @@ spec:
                 name: products
                 port:
                   number: 8080
-          - path: /helloworld
-            pathType: Exact
-            backend:
-              service:
-                name: products
-                port:
-                  number: 8080

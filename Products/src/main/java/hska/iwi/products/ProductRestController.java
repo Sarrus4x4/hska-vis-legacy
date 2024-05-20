@@ -26,7 +26,7 @@ public class ProductRestController {
 
 
     //helloworld
-    @GetMapping("/helloworld")
+    @GetMapping("/Product/helloworld")
     public String helloworld() {
         return "Hello World";
     }
@@ -110,6 +110,4 @@ public class ProductRestController {
         productRepository.deleteById(id);
         return "Deleted";
     }
-
-
 }
