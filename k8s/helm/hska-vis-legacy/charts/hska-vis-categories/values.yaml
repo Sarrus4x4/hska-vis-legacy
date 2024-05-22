@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   name: koph1033/hska-vis-legacy
-  tag: categories-0.1.4
+  tag: categories-0.1.5
 
 database:
   host: mysql.mysql
