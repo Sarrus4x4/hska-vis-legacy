@@ -2,11 +2,11 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    service: hska-vis-categories
+    app: hska-vis-categories
   name: categories
 spec:
   selector:
-    service: hska-vis-categories
+    app: hska-vis-categories
   ports:
     - name: categories
       port: 8080

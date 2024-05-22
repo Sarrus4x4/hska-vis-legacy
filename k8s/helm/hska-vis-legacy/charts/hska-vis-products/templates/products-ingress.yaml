@@ -4,6 +4,8 @@ metadata:
   name: products-ingress
   labels:
     app: ingress-hska-vis
+  annotations:
+    kubernetes.io/ingress.class: "istio"  # Tell Kubernetes to use Istio as the ingress controller
 spec:
   # tls:
   #   - hosts:
