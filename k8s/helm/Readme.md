@@ -102,6 +102,6 @@ Benutzerdaten: admin, admin
 Dashboards > Create Dashboard > Add Visualization > Configure a new data source > Prometheus > Connection=http://127.0.0.1:9090 > Save & test
 
 Test-PromML-Query (auf Code umstellen)
-histogram_quantile(0.95, sum(rate(istio_request_duration_seconds_bucket{destination_service="products.your-namespace.svc.cluster.local"}[5m])) by (le))
+histogram_quantile(0.95, sum(rate(istio_request_duration_seconds_bucket{destination_service="products.products.svc.cluster.local"}[5m])) by (le))
 Products-Microservice mit Postman aufrufen
 ```
