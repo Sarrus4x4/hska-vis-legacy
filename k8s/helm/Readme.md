@@ -48,3 +48,60 @@ microk8s enable registry
 docker build -t localhost:32000/hska-vis-mysql:0.1.0 -f docker/DockerfileMySQL .
 docker push localhost:32000/hska-vis-mysql:0.1.0
 ```
+
+## Istio installieren:
+```bash
+istio-1.22.0-win.zip von https://github.com/istio/istio/releases/tag/1.22.0 installieren
+path=%path%;<istio-1.22.0-Pfad>\bin
+istioctl install
+kubectl label namespace categories istio-injection=enabled
+kubectl label namespace products istio-injection=enabled
+
+Alle Categories und Products Pods/Service löschen (z.B. im Dashboard) und neu erstellen mit 
+helm upgrade --install -n categories categories .
+helm upgrade --install -n products products .
+im entsprechenden Ordner hska-vis-categories/products
+
+Überprüfen ob Istio aktiv:
+kubectl --namespace=categories get pod
+kubectl --namespace=products get pod
+Bei allen Pods muss 2/2 stehen, nicht mehr 1/1
+```
+
+## AddOns Installieren:
+```bash
+kubectl apply -f istio-1.22.0\samples\addons
+minikube tunnel ab jetzt laufen lassen
+```
+
+## Kiali:
+```bash
+kubectl port-forward svc/kiali -n istio-system 20001
+aufrufen unter 127.0.0.1:20001
+
+> Traffic Graph, dann Postman Journey durchklicken, Graph entsteht
+```
+![img.png](Kiali.png)
+
+## Prometheus:
+```bash
+kubectl port-forward svc/prometheus -n istio-system 9090
+aufrufen unter 127.0.0.1:9090
+evtl. downloaden https://prometheus.io/download/#prometheus
+
+Test-Query: istio_requests_total{destination_service="products.products.svc.cluster.local"}
+Products-Microservice mit Postman aufrufen
+```
+
+## Grafana:
+```bash
+aufrufen unter 127.0.0.1:3000
+evtl. vorher downloaden https://grafana.com/grafana/download
+
+Benutzerdaten: admin, admin
+Dashboards > Create Dashboard > Add Visualization > Configure a new data source > Prometheus > Connection=http://127.0.0.1:9090 > Save & test
+
+Test-PromML-Query (auf Code umstellen)
+histogram_quantile(0.95, sum(rate(istio_request_duration_seconds_bucket{destination_service="products.your-namespace.svc.cluster.local"}[5m])) by (le))
+Products-Microservice mit Postman aufrufen
+```
