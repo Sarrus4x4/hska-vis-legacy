@@ -56,15 +56,18 @@ path=%path%;<istio-1.22.0-Pfad>\bin
 istioctl install
 kubectl label namespace categories istio-injection=enabled
 kubectl label namespace products istio-injection=enabled
+kubectl label namespace mysql istio-injection=enabled
 
 Alle Categories und Products Pods/Service löschen (z.B. im Dashboard) und neu erstellen mit 
 helm upgrade --install -n categories categories .
 helm upgrade --install -n products products .
-im entsprechenden Ordner hska-vis-categories/products
+helm upgrade --install -n mysql mysql .
+im entsprechenden Ordner hska-vis-categories/products bzw. mysql
 
 Überprüfen ob Istio aktiv:
 kubectl --namespace=categories get pod
 kubectl --namespace=products get pod
+kubectl --namespace=mysql get pod
 Bei allen Pods muss 2/2 stehen, nicht mehr 1/1
 ```
 
