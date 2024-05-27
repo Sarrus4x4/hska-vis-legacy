@@ -18,3 +18,8 @@ ingress:
   name:
     enabled: false
     value: public
+
+database:
+  host: mysql.mysql
+  user: webshopuser
+  name: webshop
