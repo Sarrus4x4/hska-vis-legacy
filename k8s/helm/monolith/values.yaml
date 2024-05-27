@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   name: koph1033/hska-vis-legacy
-  tag: monolith-0.1.0
+  tag: monolith-0.1.9
 
 microservices:
   products:

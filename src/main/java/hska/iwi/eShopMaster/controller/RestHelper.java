@@ -19,9 +19,8 @@ import java.util.ArrayList;
 
 public class RestHelper {
 
-    private static final String categoryUrl = "http://categories.categories/";
-    private static final String productsUrl = "http://products.products/";
-
+    private static final String categoryUrl = "http://" + System.getenv("CATEGORIES_HOST") + ":8080/";
+    private static final String productsUrl = "http://" + System.getenv("PRODUCTS_HOST") + ":8080/";
 
     private static String getUrlFromService(String service) {
         if(service == "category") {
