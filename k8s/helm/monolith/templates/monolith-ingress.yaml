@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: monolith-ingress
+  labels:
+    app: ingress-hska-vis
+  annotations:
+    kubernetes.io/ingress.class: "istio"  # Tell Kubernetes to use Istio as the ingress controller
+spec:
+  # tls:
+  #   - hosts:
+  #       - {{ .Values.Second }}.{{ .Values.Top }}
+  #     secretName: <secret>
+  # host: {{ .Values.Second }}.{{ .Values.Top }}
+  rules:
+    - http:
+        paths:
+          - path: /Eshop-1.0.0
+            pathType: Prefix
+            backend:
+              service:
+                name: monolith
+                port:
+                  number: 8888
