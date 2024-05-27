@@ -16,5 +16,5 @@ microservices:
 
 ingress:
   name:
-    enabled: true
+    enabled: false
     value: public
