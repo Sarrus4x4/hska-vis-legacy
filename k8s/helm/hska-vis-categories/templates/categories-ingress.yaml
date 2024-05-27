@@ -5,8 +5,15 @@ metadata:
   labels:
     app: ingress-hska-vis
   annotations:
+    {{- if .Values.ingress.name.enabled }}
+    kubernetes.io/ingress.class: {{ .Values.ingress.name.value | quote }}
+    {{- else }}
     kubernetes.io/ingress.class: "istio"  # Tell Kubernetes to use Istio as the ingress controller
+    {{- end }}
 spec:
+  {{- if .Values.ingress.name.enabled }}
+  ingressClassName: {{ .Values.ingress.name.value }}
+  {{- end }}
   # tls:
   #   - hosts:
   #       - {{ .Values.Second }}.{{ .Values.Top }}

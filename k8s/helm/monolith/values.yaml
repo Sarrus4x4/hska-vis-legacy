@@ -13,3 +13,8 @@ microservices:
     host: products.products
   categories:
     host: categories.categories
+
+ingress:
+  name:
+    enabled: true
+    value: public

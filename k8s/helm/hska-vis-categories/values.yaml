@@ -16,3 +16,8 @@ database:
 microservices:
   products:
     host: products.products
+
+ingress:
+  name:
+    enabled: true
+    value: public
