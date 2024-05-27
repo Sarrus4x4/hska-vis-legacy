@@ -22,10 +22,10 @@ spec:
   rules:
     - http:
         paths:
-          - path: /Eshop-1.0.0
+          - path: /EShop-1.0.0
             pathType: Prefix
             backend:
               service:
                 name: monolith
                 port:
-                  number: 8888
+                  number: 8080
