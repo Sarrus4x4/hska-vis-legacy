@@ -4,5 +4,5 @@ metadata:
   name: monolith-database-config
 data:
   MYSQL_HOST: {{ .Values.database.host }}
-  PRODUCTS_DB_USER: {{ .Values.database.user }}
-  PRODUCTS_DB_NAME: {{ .Values.database.name }}
+  MONOLITH_DB_USER: {{ .Values.database.user }}
+  MONOLITH_DB_NAME: {{ .Values.database.name }}

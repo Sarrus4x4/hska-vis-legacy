@@ -26,9 +26,29 @@ public class HibernateUtil {
 
     public static SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
-            StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
-                    .configure() // configures settings from hibernate.cfg.xml
-                    .build();
+            // StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
+            //         .configure() // configures settings from hibernate.cfg.xml
+            //         .build();
+            StandardServiceRegistryBuilder registryBuilder = new StandardServiceRegistryBuilder();
+
+            // Load configuration from hibernate.cfg.xml
+            registryBuilder.configure();
+
+            // Override properties with environment variables if they are set
+            if (System.getenv("MONOLITH_DB_USER") != null) {
+                registryBuilder.applySetting("hibernate.connection.username", System.getenv("MONOLITH_DB_USER"));
+            }
+            if (System.getenv("MONOLITH_DB_PWD") != null) {
+                registryBuilder.applySetting("hibernate.connection.password", System.getenv("MONOLITH_DB_PWD"));
+            }
+            if (System.getenv("MYSQL_HOST") != null && System.getenv("MONOLITH_DB_NAME") != null) {
+                String dbHost = System.getenv("MYSQL_HOST");
+                String dbName = System.getenv("MONOLITH_DB_NAME");
+                String connectionURL = "jdbc:mysql://" + dbHost + ":3306/" + dbName;
+                registryBuilder.applySetting("hibernate.connection.url", connectionURL);
+            }
+
+            StandardServiceRegistry registry = registryBuilder.build();
             try {
                 sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
             } catch (Exception e) {

@@ -23,6 +23,26 @@ spec:
         - image: {{ .Values.image.name }}{{ ":" }}{{ .Values.image.tag }}
           name: categories
           env:
+            - name: MYSQL_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: monolith-database-config
+                  key: MYSQL_HOST
+            - name: MONOLITH_DB_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: monolith-database-config
+                  key: MONOLITH_DB_USER
+            - name: MONOLITH_DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: monolith-database-config
+                  key: MONOLITH_DB_NAME
+            - name: MONOLITH_DB_PWD
+              valueFrom:
+                secretKeyRef:
+                  name: monolith-credentials
+                  key: MONOLITH_DB_PASSWORD
             - name: PRODUCTS_HOST
               valueFrom:
                 configMapKeyRef:
